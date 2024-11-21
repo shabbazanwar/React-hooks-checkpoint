@@ -1,27 +1,32 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import MovieList from "./compnents/MovieList/MovieList";
 import Filter from "./compnents/Filter/Filter";
+import MovieDetails from "./compnents/MovieDetails/MovieDetails";
 import "./App.css";
 
 const App = () => {
   const [movies, setMovies] = useState([
     {
       title: "Inception",
-      description: "A mind-bending thriller.",
-      posterURL: "https://via.placeholder.com/150",
+      description: "A mind-bending thriller about dream infiltration.",
+      posterURL: "https://m.media-amazon.com/images/I/91TqE5AaFBL._AC_SL1500_.jpg",
       rating: 5,
+      trailerURL: "https://www.youtube.com/embed/YoHD9XEInc0",
     },
     {
       title: "Interstellar",
-      description: "Exploring the universe.",
-      posterURL: "https://via.placeholder.com/150",
+      description: "A journey to save humanity by exploring the stars.",
+      posterURL: "https://m.media-amazon.com/images/I/71nGWRv8bOL._AC_SY679_.jpg",
       rating: 4,
+      trailerURL: "https://www.youtube.com/embed/zSWdZVtXT7E",
     },
     {
       title: "The Dark Knight",
-      description: "A tale of the Caped Crusader.",
-      posterURL: "https://via.placeholder.com/150",
+      description: "Batman faces his greatest challenge, the Joker.",
+      posterURL: "https://m.media-amazon.com/images/I/51BQSATmnYL._AC_.jpg",
       rating: 5,
+      trailerURL: "https://www.youtube.com/embed/EXeTwQWrcwY",
     },
   ]);
 
@@ -36,26 +41,24 @@ const App = () => {
     setFilteredMovies(filtered);
   };
 
-  const handleAddMovie = () => {
-    const newMovie = {
-      title: prompt("Enter movie title:"),
-      description: prompt("Enter movie description:"),
-      posterURL: prompt("Enter movie poster URL:"),
-      rating: Number(prompt("Enter movie rating (0-5):")),
-    };
-    if (newMovie.title && newMovie.rating >= 0 && newMovie.rating <= 5) {
-      setMovies([...movies, newMovie]);
-      setFilteredMovies([...movies, newMovie]);
-    }
-  };
-
   return (
-    <div className="app">
-      <h1>Movie App</h1>
-      <Filter onFilter={handleFilter} />
-      <button onClick={handleAddMovie}>Add Movie</button>
-      <MovieList movies={filteredMovies} />
-    </div>
+    <Router>
+      <div className="app">
+        <h1>Movie App</h1>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Filter onFilter={handleFilter} />
+                <MovieList movies={filteredMovies} />
+              </>
+            }
+          />
+          <Route path="/movie/:title" element={<MovieDetails movies={movies} />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
